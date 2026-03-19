@@ -45,29 +45,30 @@ function playNotificationSound() {
 }
 
 // ── Styles ──
+// Marimbas Design System — dark mode tokens for admin
 const theme = {
-  primary: '#2563eb',
-  primaryDark: '#1d4ed8',
-  success: '#16a34a',
-  warning: '#f59e0b',
-  danger: '#dc2626',
-  bg: '#f8fafc',
-  card: '#ffffff',
-  text: '#1e293b',
-  textMuted: '#64748b',
-  border: '#e2e8f0',
+  primary: '#5c85ff',
+  primaryDark: '#4a6fd4',
+  success: '#96CEB4',
+  warning: '#FFD700',
+  danger: '#E17055',
+  bg: '#0d1117',
+  card: '#161b22',
+  text: '#e6edf3',
+  textMuted: '#8b949e',
+  border: '#30363d',
   radius: '12px',
 };
 
 const styles = {
   app: {
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     background: theme.bg,
     minHeight: '100vh',
     color: theme.text,
   },
   header: {
-    background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+    background: 'linear-gradient(135deg, #0d1117 0%, #161b22 100%)',
     color: 'white',
     padding: '16px 24px',
     display: 'flex',
@@ -209,10 +210,10 @@ const styles = {
   },
   statusBadge: (status) => {
     const colors = {
-      pending: { bg: '#fef3c7', color: '#92400e', label: '⏳ Pendiente' },
-      confirmed: { bg: '#d1fae5', color: '#065f46', label: '✅ Confirmado' },
-      cancelled: { bg: '#fee2e2', color: '#991b1b', label: '❌ Cancelado' },
-      delivered: { bg: '#dbeafe', color: '#1e40af', label: '📦 Entregado' },
+      pending: { bg: 'rgba(255,215,0,0.15)', color: '#FFD700', label: '⏳ Pendiente' },
+      confirmed: { bg: 'rgba(150,206,180,0.15)', color: '#96CEB4', label: '✅ Confirmado' },
+      cancelled: { bg: 'rgba(225,112,85,0.15)', color: '#E17055', label: '❌ Cancelado' },
+      delivered: { bg: 'rgba(92,133,255,0.15)', color: '#5c85ff', label: '📦 Entregado' },
     };
     const c = colors[status] || colors.pending;
     return {
