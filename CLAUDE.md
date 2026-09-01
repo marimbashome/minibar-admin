@@ -5,7 +5,7 @@
 
 ---
 
-<!-- BEGIN REGLA-ATRIBUCION sha=cf8b29675029 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-ATRIBUCION sha=68fe22937ee9 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 🧾 Bitácora con autor — regla dura de todos los repos
 
 Todo cambio deja rastro, y **el rastro dice quién lo hizo**, distinguiendo una IA de una persona.
@@ -22,6 +22,14 @@ Co-Authored-By: <actor que escribió el cambio> <noreply@marimbashome.com>
 X-Revisado-Por: <actor que lo revisó>      # obligatorio en identidad de huéspedes y en dinero
 X-Sesion: ses-AAAA-MM-DD-<tema>            # el mismo id en TODO lo que escriba esa sesión
 ```
+
+**El id de sesión se fija al ARRANCAR, no al cerrar.** Cada sesión de cualquier agente elige UN id `ses-AAAA-MM-DD-<tema>` en su
+primer minuto y lo estampa en todo lo que escribe: el trailer `X-Sesion` de cada commit; `p_actor => 'ia:<modelo real>'` (nunca
+`claude`, `ia:claude` ni `agente` a secas) y `p_source_path => 'Registros/YYYY-WNN/session_YYYY-MM-DD_<tema>.md'` en
+`fn_decision_log_write`; y `p_actor` con el modelo real en `fn_tablero_create_task` / `fn_tablero_set_status` /
+`fn_tablero_add_comment`. Una tarea programada sin modelo firma `sistema:<script>`; una corrida única, `migracion:<nombre>`; el
+worker de encargos, `ses-encargo-<id>`. Al cerrar, `wrapup-derivar.py --sesion <id> --actor ia:<modelo>` separa lo propio de lo ajeno
+— sin el id, la bitácora mezcla el trabajo de las otras licencias (medido 2026-09-01: 19 decisiones en la ventana, 2 propias).
 
 Si el cambio lo produjo un carril delegado (opencode, agy/Gemini, Codex, un modelo por token) y
 otro lo commiteó, **se nombran los dos**. Atribuir a quien no lo escribió es peor que no atribuir.
