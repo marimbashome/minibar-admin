@@ -5,7 +5,7 @@
 
 ---
 
-<!-- BEGIN REGLA-ATRIBUCION sha=68fe22937ee9 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-ATRIBUCION sha=e3b0958f3589 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 🧾 Bitácora con autor — regla dura de todos los repos
 
 Todo cambio deja rastro, y **el rastro dice quién lo hizo**, distinguiendo una IA de una persona.
@@ -39,13 +39,28 @@ otro lo commiteó, **se nombran los dos**. Atribuir a quien no lo escribió es p
 | Prefijo | Cuándo | Ejemplos |
 |---|---|---|
 | `humano:` | una persona lo hizo | `humano:enrique@marimbashome.com` |
-| `ia:` | un modelo lo produjo | `ia:claude-opus-5` · `ia:gemini-3.5-flash-medium` · `ia:codex` · `ia:opencode/nemotron-3.5-lightning-free` |
+| `ia:` | un modelo lo produjo | `ia:claude-opus-5` · `ia:gemini-3.7-flash` · `ia:codex` · `ia:opencode/nemotron-3.5-lightning-free` |
 | `sistema:` | tarea programada o disparador | `sistema:cron-watchdog` — **nunca `system` a secas** |
 | `migracion:` | corrida única de reacomodo | `migracion:reconstruccion-desenlaces-ago16` |
 
 Es el mismo vocabulario en los trailers del commit y en las columnas de actor de la base
 (`audit_log.changed_by`, `decision_log.actor`, `cron_change_log.actor`). Sin vocabulario único no
 se puede agrupar, y sin agrupar no hay auditoría: se midió «claude» escrito de 10 formas distintas.
+
+🔒 **En la bitácora de decisiones ya es candado, no recomendación (2026-09-01).**
+`fn_decision_log_write` **rechaza** la llamada sin `p_actor` y rechaza cualquier valor que no
+empiece con uno de los cuatro prefijos; una restricción `CHECK` en `decision_log` cierra las
+demás vías. Antes el parámetro existía pero tenía valor por omisión `'claude'`, y 207 decisiones
+quedaron sin autor real — **un candado con valor por omisión permisivo no es un candado**, la
+misma forma que `Deno.env.get('MH_ADMIN_TOKEN') || ''`.
+
+✅ **Cerrado también en las COLUMNAS (2026-09-01).** Las trece funciones con actor ya rechazan la
+llamada sin firma, y las columnas de actor de las tablas vigiladas normalizan en la puerta con
+`fn_actor_normalizar` — que traduce en vez de rechazar, para no tumbar la pantalla que escribe ni
+la operación que la bitácora venía a registrar. Aun así **pásale el actor a mano siempre**: lo que
+la puerta puede normalizar es la forma, no adivinar quién fuiste. Lo que se vigila y desde cuándo
+vive en `actor_vigilancia`; el detector `actor-fuera-de-vocabulario` avisa si una columna nueva
+nace sin su disparador.
 
 ### 3. Qué más lleva cada entrada
 
