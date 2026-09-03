@@ -81,3 +81,41 @@ alguien agrega una columna.
 Lo vigilan el candado `commit-atribucion-guard` (bloquea el commit sin trailer) y el detector
 `commit-sin-atribucion`. Especificación completa: `Vault/Sistemas/Bitacora_De_Cambios.md`.
 <!-- END REGLA-ATRIBUCION -->
+
+---
+
+<!-- BEGIN REGLA-VETO-MODELOS-CHINOS sha=a7325fce84c0 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+## 🚫 Modelos chinos fuera del caso Huawei — regla dura
+
+Palabras de Enrique (2026-09-02): **«los modelos chinos bajo ninguna circunstancia deben de trabajar
+en lo que vaya a ser relacionado con la demanda de huawei, para que sea regla dura»**.
+
+**Por qué.** La contraparte del litigio es una empresa china. Mandar el expediente —o cualquier
+material derivado que lo describa— a un modelo alojado por un proveedor de esa misma jurisdicción es
+exponerlo a la contraparte. No es un juicio de calidad: es exposición.
+
+**Qué es un modelo de origen chino.** DeepSeek (y su harness `dsh`), Kimi/Moonshot, GLM/Zhipu
+(`z-ai`), Qwen/Alibaba, Yi (01.AI), MiniMax, Baichuan, InternLM, Hunyuan/Tencent, Ernie/Baidu,
+Doubao/ByteDance, StepFun, y **cualquier alias que resuelva a uno de ellos**.
+
+**Carriles que SÍ pueden ver material del caso — son solo cuatro.** La licencia de Claude, `agy`
+(Gemini, de Google), Codex (OpenAI) y los alias `gemini-red-*` del repartidor. La lista es corta por
+una medición, no por prudencia: de los 131 alias del repartidor, solo los `gemini-red-*` fijan el
+proveedor de verdad (con `only:`). Pedirlo con `order:` no obliga a nada —ya está medido que un
+alias que pedía DeepSeek lo terminó sirviendo Alibaba—, así que **un alias de modelo no chino puede
+acabar corriendo en infraestructura china sin que nada avise**. Para este material eso no alcanza.
+
+**Qué es material del caso.** El expediente y todo lo derivado de él: el nombre de la contraparte, el
+número del juicio, la carpeta de investigación, los modelos financieros del caso, los entregables
+para el abogado, y los resúmenes, borradores o instrucciones que hablen de cualquiera de esos.
+
+**No hay bandera para saltarlo.** No existe variable de entorno ni opción que lo apague, y no se
+inventa una. Si un trabajo legítimo queda bloqueado, la salida es correrlo en un carril no chino
+—siempre hay uno disponible—, nunca desactivar el candado.
+
+**Cómo se comprueba antes de mandar nada.** `python3 Codigo/scripts/reglas/veto_huawei.py --modelo
+<alias> --texto "<contenido>"` (sale `0` si pasa, `3` si bloquea). Las listas de modelos y de
+material del caso viven en `reglas/veto_huawei.json`, su hogar único: se corrigen ahí y nadie las
+vuelve a escribir en otro lado. El veto ya está instalado en `consenso-ask.sh` y en el hook
+`veto-huawei-guard.sh`, y **falla cerrada**: si el verificador no se puede correr, no se manda nada.
+<!-- END REGLA-VETO-MODELOS-CHINOS -->
