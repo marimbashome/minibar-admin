@@ -156,3 +156,67 @@ bash ~/Documents/MarimbasHome/Codigo/scripts/corpus-search.sh "<tema>"
 
 Si vuelve vacío **te lo dice y busca por palabras**; un resultado vacío ya no significa «no existe».
 <!-- END REGLA-ACTO -->
+
+---
+
+<!-- BEGIN REGLA-ETA sha=dc05af5bea0e · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+## ⏱️ Toda actividad dice cuánto va a tardar (ETA) — regla de la casa
+
+**Al arrancar, encargar, delegar o lanzar cualquier actividad que vaya a tardar más de 2 minutos**
+(umbral vivo en `Codigo/scripts/reglas/eta.json`) —un encargo a otro carril, un lote, un script
+largo, una búsqueda a fondo, un workflow, una tarea programada disparada a mano—, **se dice de
+entrada cuánto va a tardar**: en la misma respuesta en que se arranca y antes de cualquier otra cosa.
+
+**Por qué.** El tiempo de Enrique es el recurso más escaso de la casa. Con el ETA decide si espera
+o se pasa a otra cosa; sin él, espera a ciegas o interrumpe algo que estaba por terminar.
+Instrucción suya del 2026-09-05: «eso ayuda a ver si espero una actividad o me paso a hacer otras
+cosas para optimizar tiempo, nuestro recurso más escaso».
+
+**Cómo se dice** (los valores exactos viven en `eta.json`; el bloque los cita):
+
+- **Un número con unidad:** «ETA: unos 40 minutos», «entre 60 y 75 minutos», «unas 2 horas». Si de
+  verdad no se puede estimar, se da el peor caso y cuándo se va a saber más: «no antes de las
+  14:30; a las 13:00 te digo si va a tardar más». «Pronto», «en un momento» y «ya casi» **no son
+  un ETA**.
+- **Varias actividades, varios ETA**, y la más larga primero: es la que decide si se va a hacer
+  otra cosa.
+- **Se actualiza sin que pregunten** si se desvía más del 50 % o más de 10 minutos, lo que ocurra
+  primero.
+- **Al terminar se dice lo real contra lo estimado** en una línea («tardó 52 minutos; el ETA era
+  40»). Sin esa comparación los ETA nunca se calibran.
+- **Los encargos por API devuelven su ETA en la aceptación** (`a2a_encargar`, el worker de
+  encargos, `consenso-ask`, `agy`, `dsh`, Codex), y quien los lanza lo repite a Enrique. Las tareas
+  programadas que avisan por Slack incluyen la duración esperada cuando arrancan algo largo.
+- Aplica a Claude, Hermes, Codex, dsh, opencode, agy y a cualquier carril que entre después.
+<!-- END REGLA-ETA -->
+
+---
+
+<!-- BEGIN REGLA-REPARTO-MODELOS sha=ff427d2ac5c1 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+## 🧠 El orquestador reparte sus modelos — el caro solo juzga y sintetiza
+
+**Al lanzar sub-agentes, workflows, lotes o encargos**, quien orquesta decide el modelo de CADA pieza
+antes de lanzarla. Nunca «todo en el modelo titular». Regla de Enrique del 2026-09-05: «no todos
+vayan sobre Fable, si no te vas a quemar toda la ventana de uso; tú eres el orquestador pero debes
+decidir también cómo delegar tus recursos, con calidad; tienes muchos recursos en LLMs por API».
+
+**Tres niveles** (los nombres vivos están en `Codigo/scripts/reglas/reparto-de-modelos.json`):
+
+- **Caro** (el titular de la ventana, hoy Fable 5.1): juzgar entre alternativas, sintetizar la versión
+  final, decidir alcance, la verificación adversarial de dinero e identidad de huéspedes y la
+  consistencia cruzada final. **Nunca** leer en volumen, redactar borradores, construir ni investigar.
+- **Medio** (Sonnet 5 en la licencia; por API `or-gpt-5.6-terra`, `or-gemini-3.7-flash`,
+  `or-glm-5.3-flash`): investigar en la web, redactar borradores, construir archivos, revisar con
+  lentes definidos, mirar imágenes o PDF, trabajo de navegador.
+- **Barato** (Haiku 4.5 en la licencia; por API `gpt-oss-120b` y `opencode`): extraer, clasificar,
+  contar, exportar, comprobar formato, lecturas mecánicas.
+
+**Cómo se aplica.** En `Agent` o `Workflow`, `model:` explícito en cada llamada según el nivel —
+omitirlo es elegir el caro—; por API, el alias del nivel. Meta: no más del 20 % de las piezas en el
+caro. Y **una línea de transparencia al lanzar**: cuántas piezas van a cada nivel. Si el trabajo ya
+arrancó en el caro, se reparte desde el siguiente corte; lo hecho no se tira.
+
+**Lo que manda sobre esta tabla:** la revisión adversarial bloqueante de identidad de huéspedes y
+dinero (segundo modelo de otra familia), el veto Huawei (solo carriles con ruta garantizada) y el
+enganche `delegation-gate` (lo delegable por palabras o cifras sale a LiteLLM, no a un sub-agente).
+<!-- END REGLA-REPARTO-MODELOS -->
