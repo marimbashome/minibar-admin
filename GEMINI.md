@@ -119,3 +119,40 @@ material del caso viven en `reglas/veto_huawei.json`, su hogar único: se corrig
 vuelve a escribir en otro lado. El veto ya está instalado en `consenso-ask.sh` y en el hook
 `veto-huawei-guard.sh`, y **falla cerrada**: si el verificador no se puede correr, no se manda nada.
 <!-- END REGLA-VETO-MODELOS-CHINOS -->
+
+---
+
+<!-- BEGIN REGLA-ACTO sha=1fca7e441125 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+## 🧭 Las reglas de la casa se consultan por el ACTO, antes de ejecutarlo
+
+**Antes de borrar, publicar, mandarle un mensaje a una persona, retirar un carril o una tarea
+programada, o reportar un hallazgo como nuevo**, pregunta qué se decidió ya sobre ese acto:
+
+```bash
+bash ~/Documents/MarimbasHome/Codigo/scripts/reglas-del-acto.sh "<lo que vas a hacer>"
+cat brief.md | bash ~/Documents/MarimbasHome/Codigo/scripts/reglas-del-acto.sh -
+```
+
+Contesta en menos de un segundo, sin red, y si no aplica nada lo dice. **No bloquea: informa.**
+
+**Por qué existe.** Se reconstruyeron 12 casos reales en los que una sesión contradijo o duplicó
+algo ya resuelto. En **6 de 12** el conocimiento estaba escrito, indexado y vigente y **nada lo
+trajo**: el buscador va por el TEMA de la pregunta, y el daño lo hace el ACTO que el agente decide
+ejecutar por su cuenta. En el peor caso la pregunta era «prepara el texto del aviso de privacidad»
+y lo que se rompió fue un borrado de datos de huéspedes.
+
+En las sesiones de Claude Code esto llega solo, por enganche. **Los demás carriles no ejecutan
+enganches**, así que aquí está la misma tabla detrás de un comando: si no se pregunta, no llega.
+
+**Las reglas vivas están en** `~/Documents/MarimbasHome/.auto-memory/RESTRICCIONES.md` (negocio) y
+`TRAMPAS.md` (técnicas). Al escribir una regla nueva ahí, **empieza por el acto con SUS palabras**
+—«Al borrar, purgar o depurar (DELETE, DROP, TRUNCATE)…»— o el enrutador no la entrega nunca.
+
+**Y para lo ya platicado sobre un TEMA** (que es otra pregunta):
+
+```bash
+bash ~/Documents/MarimbasHome/Codigo/scripts/corpus-search.sh "<tema>"
+```
+
+Si vuelve vacío **te lo dice y busca por palabras**; un resultado vacío ya no significa «no existe».
+<!-- END REGLA-ACTO -->
