@@ -159,7 +159,7 @@ Si vuelve vacío **te lo dice y busca por palabras**; un resultado vacío ya no 
 
 ---
 
-<!-- BEGIN REGLA-ETA sha=dc05af5bea0e · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-ETA sha=a76affd9bbd5 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## ⏱️ Toda actividad dice cuánto va a tardar (ETA) — regla de la casa
 
 **Al arrancar, encargar, delegar o lanzar cualquier actividad que vaya a tardar más de 2 minutos**
@@ -182,8 +182,28 @@ cosas para optimizar tiempo, nuestro recurso más escaso».
   otra cosa.
 - **Se actualiza sin que pregunten** si se desvía más del 50 % o más de 10 minutos, lo que ocurra
   primero.
-- **Al terminar se dice lo real contra lo estimado** en una línea («tardó 52 minutos; el ETA era
-  40»). Sin esa comparación los ETA nunca se calibran.
+- **El número se SUMA por bloques medidos, no se estima de un vistazo**, y cubre la actividad
+  COMPLETA hasta la entrega — no solo la parte delegada. Los minutos de cada bloque viven en
+  `eta.json` §`sumandos_medidos`; hoy: preparar briefs y lanzar 1.5 · una ronda de carriles en
+  paralelo 2.5 (el más lento, **no** la suma) · reintento por carril caído 2.5 y ocurre el 37% de
+  las veces · verificar una página primaria 1 · escribir un entregable 1.2 · síntesis final 4.
+  Al final se multiplica por el sesgo del carril (`eta.py sesgo`).
+  Medido el 2026-09-05: seis carriles de API entregaron en 9 minutos —lo más rápido y predecible de
+  toda la actividad— mientras verificar y escribir se llevó 10 minutos y no estaba en el número.
+- 🪤 **En un abanico se espera al MÁS LENTO, así que la mediana no sirve para estimarlo.** Con N
+  carriles el cuantil que aplica es 1−1/N (con seis, el p83). Medido sobre 290,392 llamadas de 30
+  días: p50 = 2 s, p83 = 14 s, p95 = 60 s, p99 = 186 s — la cola va de 7x a 90x la mediana, y
+  `kimi-k3` llega a p50 38 s contra p90 607 s. Estimar un abanico con la mediana es estimar el caso
+  que casi nunca ocurre.
+- **Al terminar se dice lo real contra lo estimado**, y ese número se MIDE, no se recuerda:
+  ```bash
+  ID=$(python3 Codigo/scripts/eta.py abrir --actividad "<qué>" --eta-min <n>)   # al arrancar
+  python3 Codigo/scripts/eta.py cerrar --id "$ID"   # → "tardó 23 min; el ETA era 15 (+53%)"
+  ```
+  🔴 **Sin el reloj, el «tardó N minutos» del cierre también es una suposición** — y con más error
+  que la estimación: el 2026-09-05 el ETA dijo 15, lo real fueron 23, y el cierre reportó 55.
+  El sesgo acumulado del carril se consulta con `python3 Codigo/scripts/eta.py sesgo`: si la
+  mediana real/ETA es ≥1.5x, el carril estima corto y el siguiente ETA se multiplica por ese factor.
 - **Los encargos por API devuelven su ETA en la aceptación** (`a2a_encargar`, el worker de
   encargos, `consenso-ask`, `agy`, `dsh`, Codex), y quien los lanza lo repite a Enrique. Las tareas
   programadas que avisan por Slack incluyen la duración esperada cuando arrancan algo largo.
@@ -220,3 +240,41 @@ arrancó en el caro, se reparte desde el siguiente corte; lo hecho no se tira.
 dinero (segundo modelo de otra familia), el veto Huawei (solo carriles con ruta garantizada) y el
 enganche `delegation-gate` (lo delegable por palabras o cifras sale a LiteLLM, no a un sub-agente).
 <!-- END REGLA-REPARTO-MODELOS -->
+
+---
+
+<!-- BEGIN REGLA-LECTURAS sha=64aa8d78f436 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+## 📖 Lee un modelo barato — los archivos grandes no entran a la ventana
+
+**Antes de leer archivos grandes** (más de 400 líneas o 16,000 caracteres — el umbral
+vivo está en `Codigo/scripts/reglas/lecturas-lee-un-modelo-barato.json`), la lectura
+completa **no pasa por la ventana**: se manda a `lector-bulk.sh`, que le da los archivos
+a un modelo barato del proxy y regresa SOLO la respuesta.
+
+```bash
+bash ~/Documents/MarimbasHome/Codigo/scripts/lector-bulk.sh \
+  --pregunta "¿Qué hace este servicio y quién lo llama?" \
+  --rutas src/Service.ts src/Handler.ts   # también acepta carpetas
+```
+
+**Por qué.** La ventana del modelo caro (licencia de Claude, o cualquier titular) es el
+recurso escaso de la casa. Spotify midió ~90% de ahorro de tokens con el mismo principio
+(`shunt`/bulk-reader, sep-2026); aquí el equivalente corre sobre `consenso-ask.sh` —
+con catálogo del proxy, medición y degradación ya resueltos. Lo que el modelo caro
+necesita son las RESPUESTAS, no el contenido crudo de los archivos.
+
+**Reglas del mecanismo:**
+- **Umbrales y carril son PARAMÉTRICOS** — viven en
+  `Codigo/scripts/reglas/lecturas-lee-un-modelo-barato.json`. Cambiar el modelo barato
+  o el umbral = editar ese JSON; se propaga a todos los carriles.
+- **Secretos JAMÁS salen**: `.env`, `*.pem`, `*.key`, `config*` los excluye el ejecutor
+  y avisa. La exclusión es obligatoria, no opcional.
+- **Veto Huawei primero**: el carril se comprueba con `veto_huawei.py` antes de cada
+  envío — falla cerrada. Si el material toca el caso Huawei, el carril es `agy`, Codex
+  o `gemini-red-*` (o la ventana de la licencia) y ya.
+- **Lecturas CHICAS van directas**: debajo del umbral, delegar cuesta más que leer.
+- **Editar/exigir línea exacta va directo a la ventana**: el resumen no conserva líneas
+  confiables; para editar, se lee el tramo puntual (offset/limit), no el archivo entero.
+- **No sustituye al medidor de carga**: el `medidor-de-carga` vigila la RACHA de
+  lecturas de la sesión; esta regla se aplica ARCHIVO POR ARCHIVO. Se complementan.
+<!-- END REGLA-LECTURAS -->
