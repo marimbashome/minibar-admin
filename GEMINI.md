@@ -84,7 +84,7 @@ Lo vigilan el candado `commit-atribucion-guard` (bloquea el commit sin trailer) 
 
 ---
 
-<!-- BEGIN REGLA-VETO-MODELOS-CHINOS sha=a7325fce84c0 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-VETO-MODELOS-CHINOS sha=eb15746523f3 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 🚫 Modelos chinos fuera del caso Huawei — regla dura
 
 Palabras de Enrique (2026-09-02): **«los modelos chinos bajo ninguna circunstancia deben de trabajar
@@ -113,7 +113,7 @@ para el abogado, y los resúmenes, borradores o instrucciones que hablen de cual
 inventa una. Si un trabajo legítimo queda bloqueado, la salida es correrlo en un carril no chino
 —siempre hay uno disponible—, nunca desactivar el candado.
 
-**Cómo se comprueba antes de mandar nada.** `python3 Codigo/scripts/reglas/veto_huawei.py --modelo
+**Cómo se comprueba antes de mandar nada.** `python3 ~/.local/share/marimbas/scripts-prod/reglas/veto_huawei.py --modelo
 <alias> --texto "<contenido>"` (sale `0` si pasa, `3` si bloquea). Las listas de modelos y de
 material del caso viven en `reglas/veto_huawei.json`, su hogar único: se corrigen ahí y nadie las
 vuelve a escribir en otro lado. El veto ya está instalado en `consenso-ask.sh` y en el hook
@@ -122,15 +122,15 @@ vuelve a escribir en otro lado. El veto ya está instalado en `consenso-ask.sh` 
 
 ---
 
-<!-- BEGIN REGLA-ACTO sha=1fca7e441125 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-ACTO sha=406bcbdf4dcd · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 🧭 Las reglas de la casa se consultan por el ACTO, antes de ejecutarlo
 
 **Antes de borrar, publicar, mandarle un mensaje a una persona, retirar un carril o una tarea
 programada, o reportar un hallazgo como nuevo**, pregunta qué se decidió ya sobre ese acto:
 
 ```bash
-bash ~/Documents/MarimbasHome/Codigo/scripts/reglas-del-acto.sh "<lo que vas a hacer>"
-cat brief.md | bash ~/Documents/MarimbasHome/Codigo/scripts/reglas-del-acto.sh -
+bash ~/.local/share/marimbas/scripts-prod/reglas-del-acto.sh "<lo que vas a hacer>"
+cat brief.md | bash ~/.local/share/marimbas/scripts-prod/reglas-del-acto.sh -
 ```
 
 Contesta en menos de un segundo, sin red, y si no aplica nada lo dice. **No bloquea: informa.**
@@ -151,7 +151,7 @@ enganches**, así que aquí está la misma tabla detrás de un comando: si no se
 **Y para lo ya platicado sobre un TEMA** (que es otra pregunta):
 
 ```bash
-bash ~/Documents/MarimbasHome/Codigo/scripts/corpus-search.sh "<tema>"
+bash ~/.local/share/marimbas/scripts-prod/corpus-search.sh "<tema>"
 ```
 
 Si vuelve vacío **te lo dice y busca por palabras**; un resultado vacío ya no significa «no existe».
@@ -159,11 +159,11 @@ Si vuelve vacío **te lo dice y busca por palabras**; un resultado vacío ya no 
 
 ---
 
-<!-- BEGIN REGLA-ETA sha=a76affd9bbd5 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-ETA sha=dcb1a5dc0fc1 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## ⏱️ Toda actividad dice cuánto va a tardar (ETA) — regla de la casa
 
 **Al arrancar, encargar, delegar o lanzar cualquier actividad que vaya a tardar más de 2 minutos**
-(umbral vivo en `Codigo/scripts/reglas/eta.json`) —un encargo a otro carril, un lote, un script
+(umbral vivo en `~/.local/share/marimbas/scripts-prod/reglas/eta.json`) —un encargo a otro carril, un lote, un script
 largo, una búsqueda a fondo, un workflow, una tarea programada disparada a mano—, **se dice de
 entrada cuánto va a tardar**: en la misma respuesta en que se arranca y antes de cualquier otra cosa.
 
@@ -197,12 +197,12 @@ cosas para optimizar tiempo, nuestro recurso más escaso».
   que casi nunca ocurre.
 - **Al terminar se dice lo real contra lo estimado**, y ese número se MIDE, no se recuerda:
   ```bash
-  ID=$(python3 Codigo/scripts/eta.py abrir --actividad "<qué>" --eta-min <n>)   # al arrancar
-  python3 Codigo/scripts/eta.py cerrar --id "$ID"   # → "tardó 23 min; el ETA era 15 (+53%)"
+  ID=$(python3 ~/.local/share/marimbas/scripts-prod/eta.py abrir --actividad "<qué>" --eta-min <n>)   # al arrancar
+  python3 ~/.local/share/marimbas/scripts-prod/eta.py cerrar --id "$ID"   # → "tardó 23 min; el ETA era 15 (+53%)"
   ```
   🔴 **Sin el reloj, el «tardó N minutos» del cierre también es una suposición** — y con más error
   que la estimación: el 2026-09-05 el ETA dijo 15, lo real fueron 23, y el cierre reportó 55.
-  El sesgo acumulado del carril se consulta con `python3 Codigo/scripts/eta.py sesgo`: si la
+  El sesgo acumulado del carril se consulta con `python3 ~/.local/share/marimbas/scripts-prod/eta.py sesgo`: si la
   mediana real/ETA es ≥1.5x, el carril estima corto y el siguiente ETA se multiplica por ese factor.
 - **Los encargos por API devuelven su ETA en la aceptación** (`a2a_encargar`, el worker de
   encargos, `consenso-ask`, `agy`, `dsh`, Codex), y quien los lanza lo repite a Enrique. Las tareas
@@ -212,7 +212,7 @@ cosas para optimizar tiempo, nuestro recurso más escaso».
 
 ---
 
-<!-- BEGIN REGLA-REPARTO-MODELOS sha=ff427d2ac5c1 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-REPARTO-MODELOS sha=99f44090f0b3 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 🧠 El orquestador reparte sus modelos — el caro solo juzga y sintetiza
 
 **Al lanzar sub-agentes, workflows, lotes o encargos**, quien orquesta decide el modelo de CADA pieza
@@ -220,7 +220,7 @@ antes de lanzarla. Nunca «todo en el modelo titular». Regla de Enrique del 202
 vayan sobre Fable, si no te vas a quemar toda la ventana de uso; tú eres el orquestador pero debes
 decidir también cómo delegar tus recursos, con calidad; tienes muchos recursos en LLMs por API».
 
-**Tres niveles** (los nombres vivos están en `Codigo/scripts/reglas/reparto-de-modelos.json`):
+**Tres niveles** (los nombres vivos están en `~/.local/share/marimbas/scripts-prod/reglas/reparto-de-modelos.json`):
 
 - **Caro** (el titular de la ventana, hoy Fable 5.1): juzgar entre alternativas, sintetizar la versión
   final, decidir alcance, la verificación adversarial de dinero e identidad de huéspedes y la
@@ -243,16 +243,16 @@ enganche `delegation-gate` (lo delegable por palabras o cifras sale a LiteLLM, n
 
 ---
 
-<!-- BEGIN REGLA-LECTURAS sha=64aa8d78f436 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-LECTURAS sha=eabef9f2fa12 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 📖 Lee un modelo barato — los archivos grandes no entran a la ventana
 
 **Antes de leer archivos grandes** (más de 400 líneas o 16,000 caracteres — el umbral
-vivo está en `Codigo/scripts/reglas/lecturas-lee-un-modelo-barato.json`), la lectura
+vivo está en `~/.local/share/marimbas/scripts-prod/reglas/lecturas-lee-un-modelo-barato.json`), la lectura
 completa **no pasa por la ventana**: se manda a `lector-bulk.sh`, que le da los archivos
 a un modelo barato del proxy y regresa SOLO la respuesta.
 
 ```bash
-bash ~/Documents/MarimbasHome/Codigo/scripts/lector-bulk.sh \
+bash ~/.local/share/marimbas/scripts-prod/lector-bulk.sh \
   --pregunta "¿Qué hace este servicio y quién lo llama?" \
   --rutas src/Service.ts src/Handler.ts   # también acepta carpetas
 ```
@@ -265,7 +265,7 @@ necesita son las RESPUESTAS, no el contenido crudo de los archivos.
 
 **Reglas del mecanismo:**
 - **Umbrales y carril son PARAMÉTRICOS** — viven en
-  `Codigo/scripts/reglas/lecturas-lee-un-modelo-barato.json`. Cambiar el modelo barato
+  `~/.local/share/marimbas/scripts-prod/reglas/lecturas-lee-un-modelo-barato.json`. Cambiar el modelo barato
   o el umbral = editar ese JSON; se propaga a todos los carriles.
 - **Secretos JAMÁS salen**: `.env`, `*.pem`, `*.key`, `config*` los excluye el ejecutor
   y avisa. La exclusión es obligatoria, no opcional.
@@ -278,3 +278,64 @@ necesita son las RESPUESTAS, no el contenido crudo de los archivos.
 - **No sustituye al medidor de carga**: el `medidor-de-carga` vigila la RACHA de
   lecturas de la sesión; esta regla se aplica ARCHIVO POR ARCHIVO. Se complementan.
 <!-- END REGLA-LECTURAS -->
+
+---
+
+<!-- BEGIN REGLA-CONSUMO sha=34769224c4ca · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+## 📊 El orquestador rinde cuentas — qué modelos usó, cuánto y cómo (regla de la casa)
+
+**Al lanzar cualquier trabajo delegado** (sub-agente, workflow, encargo, lote, carril por API) **y al
+cerrarlo, junto con el ETA**, se dice qué modelos se usaron, cuánto y cómo se consumió. Instrucción
+de Enrique del 2026-09-14: «así como tenemos el ETA… es importante que digas qué LLMs estás usando,
+cuánto y cómo se consumió; al final tú eres el orquestador pero necesitamos tener analítica y otras
+cosas al detalle cuando trabajamos».
+
+**Por qué.** La ventana de la licencia es el recurso escaso y los carriles por API cuestan dinero.
+Sin la cuenta, ni el reparto de modelos ni el gasto se calibran, y el «gasté poco» sale de memoria
+— la misma falla que tenía el ETA antes del reloj.
+
+**Tres momentos** (los parámetros viven en `~/.local/share/marimbas/scripts-prod/reglas/consumo.json`; el bloque los cita):
+
+- **Al lanzar:** una línea con el reparto — cuántas piezas van a cada nivel (caro / medio / barato),
+  por qué carril, y **cuáles se miden por estimación** (`agy` y Codex: por caracteres, no por
+  tokens reales) **o por ventana de tiempo** (`dsh`: llama con llave propia). Un encargo por A2A
+  lleva `opciones: {sesion: "<id>"}`; sin eso su gasto queda sin dueño.
+- **Al cerrar cada actividad delegada** (el mismo momento de `eta.py cerrar`): la línea de consumo
+  **medida, nunca recordada**:
+  ```bash
+  python3 ~/.local/share/marimbas/scripts-prod/consumo-sesion.py --registrar
+  ```
+  Dice, por API: llamadas, **la tienda real que sirvió** (el alias no la garantiza), tokens, costo,
+  latencia, fallas y reintentos; de la licencia: turnos, tokens, % de caché leída y precio sombra;
+  el reparto real de piezas contra la meta; el ETA real contra el estimado; y **lo que quedó sin
+  medir**, para que el total nunca parezca completo cuando no lo es.
+- **Al cerrar la sesión:** la sección «Costos LLM» de la bitácora la deriva `wrapup-derivar.py` del
+  mismo guion. No se redacta.
+
+**Lo que hace posible medirlo** — sin esto el guion imprime «sin etiqueta de sesión»:
+
+- La sesión se abre con **`bash ~/.local/share/marimbas/scripts-prod/sesion.sh abrir ses-AAAA-MM-DD-<tema> --actor
+  ia:<modelo> --tema "…" --proyecto <slug>`** en el primer minuto. Guarda el id por sesión de
+  Claude Code y lo abre en la base. 🔴 `export MARIMBAS_SESION=…` **no sirve**: en Claude Code cada
+  llamada de Bash es un shell nuevo y la variable muere ahí mismo (medido: 1 sesión etiquetada en
+  14 días, y era una prueba).
+- Los guiones de la casa que llaman al proxy (`consenso-ask.sh`, `lector-bulk.sh`,
+  `litellm-web.sh`) etiquetan cada llamada con esa sesión; el registro de gasto la copia a
+  `llm_usage_log.sesion`, y `fn_sesion_rastro('<id>')` la devuelve junto con todo lo demás que la
+  sesión tocó. La licencia se liga sola: el minado diario de transcripciones escribe la misma columna.
+- Lo que no pasa por el proxy entra por `medir-carril.py`, la única puerta para asentar una llamada
+  fuera de él: las envolturas `agy` y `codex` de la Mac la llaman solas, el servidor A2A la llama
+  por sus carriles `opencode`, `agy` y `codex`, y `dsh.sh` deja su ventana de tiempo para que el
+  reloj le atribuya las llamadas del proxy que cayeron dentro.
+- **Todo encargo por API termina con su firma** (regla 6 del preludio): modelo real que lo sirvió,
+  tokens y tiempo. Quien lo lanza la repite en su línea de consumo.
+
+**Prohibido:** «gasté poco», «casi nada», «unos cuantos tokens», un costo sin decir qué modelo y
+qué tienda, y un total que oculte lo que no se midió.
+
+**Vigilancia:** detector `consumo-sin-medir` — grita si la bitácora
+`~/.local/state/marimbas/consumo-log.jsonl` deja de escribirse 14 días mientras sí hay cierres de
+ETA, si el etiquetado de sesión se cae en el proxy, o si hay sesiones con ETA y sin consumo.
+Aplica a Claude, Hermes, Codex, dsh, opencode, agy, el worker de encargos y a cualquier carril que
+entre después.
+<!-- END REGLA-CONSUMO -->
