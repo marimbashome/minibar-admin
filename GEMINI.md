@@ -84,44 +84,57 @@ Lo vigilan el candado `commit-atribucion-guard` (bloquea el commit sin trailer) 
 
 ---
 
-<!-- BEGIN REGLA-VETO-MODELOS-CHINOS sha=c02548889f03 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
-## 🚫 Modelos chinos fuera del caso Huawei — regla dura
+<!-- BEGIN REGLA-VETO-MODELOS-CHINOS sha=730397e37818 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+## 🚫 Modelos chinos fuera del litigio vetado — regla dura
 
-Palabras de Enrique (2026-09-02): **«los modelos chinos bajo ninguna circunstancia deben de trabajar
-en lo que vaya a ser relacionado con la demanda de huawei, para que sea regla dura»**.
+Regla de Enrique (2026-09-02): los modelos chinos **bajo ninguna circunstancia** trabajan en nada
+relacionado con el litigio vetado, y es regla dura. La cita textual vive en el verificador
+(`reglas/veto_*.py`); aquí no se copia porque nombra a la contraparte.
 
 **Por qué.** La contraparte del litigio es una empresa china. Mandar el expediente —o cualquier
 material derivado que lo describa— a un modelo alojado por un proveedor de esa misma jurisdicción es
 exponerlo a la contraparte. No es un juicio de calidad: es exposición.
 
+**Por qué este texto no nombra el caso.** Estas instrucciones las leen también modelos de la
+jurisdicción vetada —dsh, Hermes con su titular y sus respaldos, el carril de código de la puerta de
+encargos—, y el nombre de la contraparte ya es material del caso. Por eso aquí se dice «el litigio
+vetado» y todo archivo cuyo nombre lo lleva se cita con comodín (`reglas/veto_*.py`). Una prueba de
+los candados falla si un bloque vuelve a traerlo, y el vigilante del veto revisa cada caja de agente.
+
 **Qué es un modelo de origen chino.** DeepSeek (y su harness `dsh`), Kimi/Moonshot, GLM/Zhipu
 (`z-ai`), Qwen/Alibaba, Yi (01.AI), MiniMax, Baichuan, InternLM, Hunyuan/Tencent, Ernie/Baidu,
 Doubao/ByteDance, StepFun, y **cualquier alias que resuelva a uno de ellos** — incluido Composer, el
 modelo propio de Cursor (Composer 2 se construyó sobre Kimi K2.5), y el modo Auto de Cursor, que
-puede elegirlo.
+puede elegirlo. La lista viva de patrones está en `reglas/veto_*.json` (`modelos_de_origen_chino`).
 
-**Carriles que SÍ pueden ver material del caso — son solo cinco.** La licencia de Claude, `agy`
-(Gemini, de Google), Codex (OpenAI), los alias `gemini-red-*` del repartidor y Cursor Pro con Grok Bot
-(autorizado por Enrique el 2026-09-27; dentro de Cursor siempre con el modelo nombrado y de casa no
-china —Grok, Claude, GPT o Gemini—, nunca Auto ni Composer). La lista vive en `reglas/veto_huawei.json`. La lista es corta por
-una medición, no por prudencia: de los 131 alias del repartidor, solo los `gemini-red-*` fijan el
-proveedor de verdad (con `only:`). Pedirlo con `order:` no obliga a nada —ya está medido que un
-alias que pedía DeepSeek lo terminó sirviendo Alibaba—, así que **un alias de modelo no chino puede
-acabar corriendo en infraestructura china sin que nada avise**. Para este material eso no alcanza.
+**Carriles que SÍ pueden ver material del caso.** Son pocos y su lista exacta vive en
+`reglas/veto_*.json` (`carriles_permitidos_para_el_caso`), su hogar único: se consulta ahí, no de
+memoria, porque cambia (el 2026-09-27 entró Cursor Pro con Grok Bot). Los fijos son la licencia de
+Claude, `agy` (Gemini, de Google) y Codex (OpenAI); dentro de Cursor, siempre con el modelo nombrado y
+de casa no china —Grok, Claude, GPT o Gemini—, nunca Auto ni Composer. La lista es corta por una
+medición, no por prudencia: de los alias del repartidor solo entran los que fijan el proveedor de
+verdad (con `only:`). Pedirlo con `order:` no obliga a nada —ya está medido que un alias que pedía
+DeepSeek lo terminó sirviendo Alibaba—, así que **un alias de modelo no chino puede acabar corriendo
+en infraestructura china sin que nada avise**. Para este material eso no alcanza.
 
 **Qué es material del caso.** El expediente y todo lo derivado de él: el nombre de la contraparte, el
 número del juicio, la carpeta de investigación, los modelos financieros del caso, los entregables
-para el abogado, y los resúmenes, borradores o instrucciones que hablen de cualquiera de esos.
+para el abogado, y los resúmenes, borradores o instrucciones que hablen de cualquiera de esos. Los
+términos exactos viven SOLO en `reglas/veto_*.json` (`material_del_caso`) y no se copian a ningún
+otro lado: para saber si un texto o un archivo lo es no se adivina, se le pregunta al verificador,
+que contesta la categoría y el renglón, nunca el término.
 
 **No hay bandera para saltarlo.** No existe variable de entorno ni opción que lo apague, y no se
 inventa una. Si un trabajo legítimo queda bloqueado, la salida es correrlo en un carril no chino
 —siempre hay uno disponible—, nunca desactivar el candado.
 
-**Cómo se comprueba antes de mandar nada.** `python3 ~/.local/share/marimbas/scripts-prod/reglas/veto_huawei.py --modelo
-<alias> --texto "<contenido>"` (sale `0` si pasa, `3` si bloquea). Las listas de modelos y de
-material del caso viven en `reglas/veto_huawei.json`, su hogar único: se corrigen ahí y nadie las
-vuelve a escribir en otro lado. El veto ya está instalado en `consenso-ask.sh` y en el hook
-`veto-huawei-guard.sh`, y **falla cerrada**: si el verificador no se puede correr, no se manda nada.
+**Cómo se comprueba antes de mandar nada.** `python3 ~/.local/share/marimbas/scripts-prod/reglas/veto_*.py
+--modelo <alias> --texto-de <archivo>` (o `--texto "<contenido>"`); sale `0` si pasa y `3` si
+bloquea, y con `--donde` dice en qué renglones está el material sin repetirlo. Las listas de modelos,
+de carriles y de material del caso viven en `reglas/veto_*.json`, su hogar único: se corrigen ahí y
+nadie las vuelve a escribir en otro lado. El veto ya está instalado en los carriles de la casa (el
+mismo catálogo declara cuáles, en `consumidores_del_veto`) y en el enganche `veto-*-guard.sh` de las
+sesiones de Claude, y **falla cerrada**: si el verificador no se puede correr, no se manda nada.
 <!-- END REGLA-VETO-MODELOS-CHINOS -->
 
 ---
@@ -216,7 +229,7 @@ cosas para optimizar tiempo, nuestro recurso más escaso».
 
 ---
 
-<!-- BEGIN REGLA-REPARTO-MODELOS sha=ae12dcd39a73 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-REPARTO-MODELOS sha=f32086879fca · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 🧠 El orquestador reparte sus modelos — el caro solo juzga y sintetiza
 
 **Al lanzar sub-agentes, workflows, lotes o encargos**, quien orquesta decide el modelo de CADA pieza
@@ -257,13 +270,13 @@ por perderse se lee EN VIVO cuenta como gratis, y entre suscripciones va primero
 empate (±0.5 en el examen) gana lo gratis; (5) el material del caso vetado solo va por sus carriles.
 
 **Lo que manda sobre esta tabla:** la revisión adversarial bloqueante de identidad de huéspedes y
-dinero (segundo modelo de otra familia), el veto Huawei (solo carriles con ruta garantizada) y el
+dinero (segundo modelo de otra familia), el veto de jurisdicción (solo carriles con ruta garantizada) y el
 enganche `delegation-gate` (lo delegable por palabras o cifras sale a LiteLLM, no a un sub-agente).
 <!-- END REGLA-REPARTO-MODELOS -->
 
 ---
 
-<!-- BEGIN REGLA-LECTURAS sha=eabef9f2fa12 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-LECTURAS sha=07b864db28ab · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 📖 Lee un modelo barato — los archivos grandes no entran a la ventana
 
 **Antes de leer archivos grandes** (más de 400 líneas o 16,000 caracteres — el umbral
@@ -289,9 +302,10 @@ necesita son las RESPUESTAS, no el contenido crudo de los archivos.
   o el umbral = editar ese JSON; se propaga a todos los carriles.
 - **Secretos JAMÁS salen**: `.env`, `*.pem`, `*.key`, `config*` los excluye el ejecutor
   y avisa. La exclusión es obligatoria, no opcional.
-- **Veto Huawei primero**: el carril se comprueba con `veto_huawei.py` antes de cada
-  envío — falla cerrada. Si el material toca el caso Huawei, el carril es `agy`, Codex
-  o `gemini-red-*` (o la ventana de la licencia) y ya.
+- **Veto de jurisdicción primero**: el carril se comprueba con `reglas/veto_*.py` antes de cada
+  envío — falla cerrada. Si el material toca el litigio vetado, el carril es uno de la lista
+  permitida de `reglas/veto_*.json` (la licencia, `agy`, Codex y los alias que clavan su
+  proveedor) y ya.
 - **Lecturas CHICAS van directas**: debajo del umbral, delegar cuesta más que leer.
 - **Editar/exigir línea exacta va directo a la ventana**: el resumen no conserva líneas
   confiables; para editar, se lee el tramo puntual (offset/limit), no el archivo entero.
