@@ -84,7 +84,7 @@ Lo vigilan el candado `commit-atribucion-guard` (bloquea el commit sin trailer) 
 
 ---
 
-<!-- BEGIN REGLA-VETO-MODELOS-CHINOS sha=eb15746523f3 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-VETO-MODELOS-CHINOS sha=c02548889f03 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 🚫 Modelos chinos fuera del caso Huawei — regla dura
 
 Palabras de Enrique (2026-09-02): **«los modelos chinos bajo ninguna circunstancia deben de trabajar
@@ -96,10 +96,14 @@ exponerlo a la contraparte. No es un juicio de calidad: es exposición.
 
 **Qué es un modelo de origen chino.** DeepSeek (y su harness `dsh`), Kimi/Moonshot, GLM/Zhipu
 (`z-ai`), Qwen/Alibaba, Yi (01.AI), MiniMax, Baichuan, InternLM, Hunyuan/Tencent, Ernie/Baidu,
-Doubao/ByteDance, StepFun, y **cualquier alias que resuelva a uno de ellos**.
+Doubao/ByteDance, StepFun, y **cualquier alias que resuelva a uno de ellos** — incluido Composer, el
+modelo propio de Cursor (Composer 2 se construyó sobre Kimi K2.5), y el modo Auto de Cursor, que
+puede elegirlo.
 
-**Carriles que SÍ pueden ver material del caso — son solo cuatro.** La licencia de Claude, `agy`
-(Gemini, de Google), Codex (OpenAI) y los alias `gemini-red-*` del repartidor. La lista es corta por
+**Carriles que SÍ pueden ver material del caso — son solo cinco.** La licencia de Claude, `agy`
+(Gemini, de Google), Codex (OpenAI), los alias `gemini-red-*` del repartidor y Cursor Pro con Grok Bot
+(autorizado por Enrique el 2026-09-27; dentro de Cursor siempre con el modelo nombrado y de casa no
+china —Grok, Claude, GPT o Gemini—, nunca Auto ni Composer). La lista vive en `reglas/veto_huawei.json`. La lista es corta por
 una medición, no por prudencia: de los 131 alias del repartidor, solo los `gemini-red-*` fijan el
 proveedor de verdad (con `only:`). Pedirlo con `order:` no obliga a nada —ya está medido que un
 alias que pedía DeepSeek lo terminó sirviendo Alibaba—, así que **un alias de modelo no chino puede
@@ -212,7 +216,7 @@ cosas para optimizar tiempo, nuestro recurso más escaso».
 
 ---
 
-<!-- BEGIN REGLA-REPARTO-MODELOS sha=99f44090f0b3 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-REPARTO-MODELOS sha=ae12dcd39a73 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 🧠 El orquestador reparte sus modelos — el caro solo juzga y sintetiza
 
 **Al lanzar sub-agentes, workflows, lotes o encargos**, quien orquesta decide el modelo de CADA pieza
@@ -235,6 +239,22 @@ decidir también cómo delegar tus recursos, con calidad; tienes muchos recursos
 omitirlo es elegir el caro—; por API, el alias del nivel. Meta: no más del 20 % de las piezas en el
 caro. Y **una línea de transparencia al lanzar**: cuántas piezas van a cada nivel. Si el trabajo ya
 arrancó en el caro, se reparte desde el siguiente corte; lo hecho no se tira.
+
+**Por tipo de trabajo, el carril** (orden, carriles y desempate viven en el mismo JSON,
+`carriles_por_tipo_de_trabajo`; «delega a Cursor» funciona igual que «delega a Codex»):
+
+| Tipo | Orden |
+|---|---|
+| Necesita manos (muchos archivos, comandos, el repo) | Codex → `dsh` con el MaaS gratis → Cursor → por uso |
+| Escribir pruebas | igual; Cursor sube antes de lo gratis solo si su examen le gana por más de 0.5 |
+| Solo texto (resumir, redactar, clasificar, analizar) | gratis (MaaS, `opencode`) → suscripción → por uso |
+| Internet o visión | `agy` → Grok Bot a mano, si es X |
+| Juicio, decisión, versión final | la licencia de Claude; no se delega |
+
+Desempate: (1) si Enrique nombra el carril, ese; (2) úsalo o piérdelo: una suscripción cuyo cupo
+por perderse se lee EN VIVO cuenta como gratis, y entre suscripciones va primero la que más pierde;
+(3) sin lectura viva de cupo (hoy Cursor), no se elige por cupo: va después de lo gratis; (4) en
+empate (±0.5 en el examen) gana lo gratis; (5) el material del caso vetado solo va por sus carriles.
 
 **Lo que manda sobre esta tabla:** la revisión adversarial bloqueante de identidad de huéspedes y
 dinero (segundo modelo de otra familia), el veto Huawei (solo carriles con ruta garantizada) y el
