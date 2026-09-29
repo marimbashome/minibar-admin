@@ -5,7 +5,7 @@
 
 ---
 
-<!-- BEGIN REGLA-ATRIBUCION sha=e3b0958f3589 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-ATRIBUCION sha=3599b24c89e2 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 🧾 Bitácora con autor — regla dura de todos los repos
 
 Todo cambio deja rastro, y **el rastro dice quién lo hizo**, distinguiendo una IA de una persona.
@@ -18,10 +18,19 @@ El autor de git es **siempre** `enrique.miceli@gmail.com` (si no, Vercel rechaza
 así que el autor no identifica a nadie. La atribución real viaja en los trailers del mensaje:
 
 ```
-Co-Authored-By: <actor que escribió el cambio> <noreply@marimbashome.com>
+Co-Authored-By: <actor que escribió el cambio> <noreply+<slug del actor>@marimbashome.com>
 X-Revisado-Por: <actor que lo revisó>      # obligatorio en identidad de huéspedes y en dinero
 X-Sesion: ses-AAAA-MM-DD-<tema>            # el mismo id en TODO lo que escriba esa sesión
 ```
+
+**Un correo por actor, nunca uno compartido (2026-09-29).** GitHub distingue a los co-autores por el
+correo: al hacer squash deja uno por correo, y con un correo común el segundo actor de un PR desaparece
+de `main` (medido: `nireto#702` perdió a Gemini). El slug es el actor sin `ia:`, en minúsculas y con
+`/`, `.`, `:` y espacios cambiados por `-`: `ia:gemini-3.7-flash` → `noreply+gemini-3-7-flash@marimbashome.com`,
+`sistema:autofix-clases` → `noreply+sistema-autofix-clases@marimbashome.com`; una persona firma con su
+propio correo. En código lo arma `research_common.trailer_de_coautor(actor)`. **El trailer que Claude
+Code propone por omisión (`Claude … <noreply@anthropic.com>`) se sustituye por este**: todos los
+modelos de Claude comparten ese correo.
 
 **El id de sesión se fija al ARRANCAR, no al cerrar.** Cada sesión de cualquier agente elige UN id `ses-AAAA-MM-DD-<tema>` en su
 primer minuto y lo estampa en todo lo que escribe: el trailer `X-Sesion` de cada commit; `p_actor => 'ia:<modelo real>'` (nunca
@@ -78,8 +87,9 @@ alguien agrega una columna.
 
 ### 5. Un cambio sin rastro es un defecto
 
-Lo vigilan el candado `commit-atribucion-guard` (bloquea el commit sin trailer) y el detector
-`commit-sin-atribucion`. Especificación completa: `Vault/Sistemas/Bitacora_De_Cambios.md`.
+Lo vigilan el candado `commit-atribucion-guard` (bloquea el commit sin trailer o con un correo
+compartido) y los detectores `commit-sin-atribucion` y `coautor-perdido-en-squash` (un squash en `main`
+con menos co-autores que su rama). Especificación completa: `Vault/Sistemas/Bitacora_De_Cambios.md`.
 <!-- END REGLA-ATRIBUCION -->
 
 ---
