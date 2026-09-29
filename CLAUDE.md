@@ -229,7 +229,7 @@ cosas para optimizar tiempo, nuestro recurso más escaso».
 
 ---
 
-<!-- BEGIN REGLA-REPARTO-MODELOS sha=f32086879fca · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-REPARTO-MODELOS sha=959d432467ca · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 🧠 El orquestador reparte sus modelos — el caro solo juzga y sintetiza
 
 **Al lanzar sub-agentes, workflows, lotes o encargos**, quien orquesta decide el modelo de CADA pieza
@@ -242,7 +242,7 @@ decidir también cómo delegar tus recursos, con calidad; tienes muchos recursos
 - **Caro** (el titular de la ventana, hoy Fable 5.1): juzgar entre alternativas, sintetizar la versión
   final, decidir alcance, la verificación adversarial de dinero e identidad de huéspedes y la
   consistencia cruzada final. **Nunca** leer en volumen, redactar borradores, construir ni investigar.
-- **Medio** (Sonnet 5 en la licencia; por API `or-gpt-5.6-terra`, `or-gemini-3.7-flash`,
+- **Medio** (Sonnet 5.5 en la licencia; por API `or-gpt-5.6-terra`, `or-gemini-3.7-flash`,
   `or-glm-5.3-flash`): investigar en la web, redactar borradores, construir archivos, revisar con
   lentes definidos, mirar imágenes o PDF, trabajo de navegador.
 - **Barato** (Haiku 4.5 en la licencia; por API `gpt-oss-120b` y `opencode`): extraer, clasificar,
