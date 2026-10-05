@@ -383,3 +383,40 @@ ETA, si el etiquetado de sesión se cae en el proxy, o si hay sesiones con ETA y
 Aplica a Claude, Hermes, Codex, dsh, opencode, agy, el worker de encargos y a cualquier carril que
 entre después.
 <!-- END REGLA-CONSUMO -->
+
+---
+
+<!-- BEGIN REGLA-REDTEAM-ADVERSARIAL sha=6eb2578ea6ce · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+## 🛡️ Red team y revisión adversarial por defecto — todo trabajo, todo proyecto (regla de la casa)
+
+**Todo lo que se construye o se cambia entra solo, sin que nadie lo pida, a dos revisiones:** la
+**adversarial** (un modelo de OTRA familia que la del autor intenta tumbarlo citando el código) y el
+**red team** (un adversario que intenta romperlo, robarlo o abusarlo). Vale para Marimbas, Nireto,
+Facturea, MetroGuia y todo proyecto, y para Claude, Codex, Cursor, dsh, Hermes, agy, opencode y
+cualquier carril que entre después. Regla de Enrique del 2026-10-04: «siempre que estemos
+trabajando en algo por default debe entrar redteam y adversariales para todos los projects… y
+siempre se aplique como regla».
+
+**Lo que ya corre solo** (parámetros en `~/.local/share/marimbas/scripts-prod/reglas/redteam-adversarial.json`):
+
+- **Cada PR de cualquier repo de la casa** pasa por la puerta adversarial —dos jueces de familias
+  distintas, ya no solo lo de identidad o dinero— y, si toca superficie de ataque (rutas, funciones
+  públicas, webhooks, autenticación, pantallas con parámetros, manejadores de Go), el primer juez lo
+  ataca además con los lentes del red team. Su estado en GitHub: `revision-adversarial-sensible`.
+- **Al abrir el PR desde Claude Code**, el enganche `redteam-por-defecto.sh` despacha esa puerta en el
+  momento; desde otro carril, el temporizador la corre en menos de 30 minutos.
+- **Cada noche** el red team ataca los repos de todas las cuentas de la casa, primero lo cambiado en
+  las últimas 30 horas.
+
+**Lo que le toca a quien trabaja:**
+
+- **Ningún cambio se declara terminado sin leer el veredicto de su PR**
+  (`gh api repos/<dueño>/<repo>/commits/<sha>/status`). Un hallazgo confirmado se arregla en la misma
+  sesión; uno falso se refuta con evidencia, no se ignora.
+- **Lo que no pasa por un PR también entra:** una migración aplicada directo a la base, una función
+  desplegada, un cambio de permisos o de configuración, un texto que sale a un tercero, o un análisis
+  o una cifra que decide algo. Antes de entregarlo, un modelo de otra familia intenta refutarlo; si
+  toca acceso, datos personales o dinero, además lo ataca el red team (`/redteam` en Claude Code).
+- **El revisor siempre es de otra familia que el autor**, y el material del litigio vetado solo va
+  por sus carriles permitidos.
+<!-- END REGLA-REDTEAM-ADVERSARIAL -->
