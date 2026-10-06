@@ -325,7 +325,7 @@ necesita son las RESPUESTAS, no el contenido crudo de los archivos.
 
 ---
 
-<!-- BEGIN REGLA-CONSUMO sha=34769224c4ca · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-CONSUMO sha=683b289bdf27 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 📊 El orquestador rinde cuentas — qué modelos usó, cuánto y cómo (regla de la casa)
 
 **Al lanzar cualquier trabajo delegado** (sub-agente, workflow, encargo, lote, carril por API) **y al
@@ -353,6 +353,9 @@ Sin la cuenta, ni el reparto de modelos ni el gasto se calibran, y el «gasté p
   latencia, fallas y reintentos; de la licencia: turnos, tokens, % de caché leída y precio sombra;
   el reparto real de piezas contra la meta; el ETA real contra el estimado; y **lo que quedó sin
   medir**, para que el total nunca parezca completo cuando no lo es.
+  Al nombrar el consumo se dice la herramienta o tienda, el plan y la **CUENTA exacta** (correo),
+  leídos de `reglas/codex-cuentas.json`, `reglas/cursor-grokbot.json` o
+  `Vault/Sistemas/Antigravity_CLI.md` para agy; no se adivinan por el alias.
 - **Al cerrar la sesión:** la sección «Costos LLM» de la bitácora la deriva `wrapup-derivar.py` del
   mismo guion. No se redacta.
 
@@ -386,7 +389,7 @@ entre después.
 
 ---
 
-<!-- BEGIN REGLA-REDTEAM-ADVERSARIAL sha=6eb2578ea6ce · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+<!-- BEGIN REGLA-REDTEAM-ADVERSARIAL sha=7c1bc0a293c7 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
 ## 🛡️ Red team y revisión adversarial por defecto — todo trabajo, todo proyecto (regla de la casa)
 
 **Todo lo que se construye o se cambia entra solo, sin que nadie lo pida, a dos revisiones:** la
@@ -404,7 +407,11 @@ siempre se aplique como regla».
   públicas, webhooks, autenticación, pantallas con parámetros, manejadores de Go), el primer juez lo
   ataca además con los lentes del red team. Su estado en GitHub: `revision-adversarial-sensible`.
 - **Al abrir el PR desde Claude Code**, el enganche `redteam-por-defecto.sh` despacha esa puerta en el
-  momento; desde otro carril, el temporizador la corre en menos de 30 minutos.
+  momento y la reintenta si GitHub frena por su límite. Desde otro carril la recoge la corrida
+  programada de la PC: arranca cada 30 minutos, pero llegar a un PR recién abierto le toma una
+  mediana de 34 minutos y hasta una hora en un día cargado (medido del 28-sep al 5-oct sobre 347
+  corridas; el peor caso, 4 horas). Si a la hora el PR sigue sin `revision-adversarial-sensible`,
+  se despacha a mano: `pr-adversarial-gate.py --solo <dueño>/<repo>#<n>`.
 - **Cada noche** el red team ataca los repos de todas las cuentas de la casa, primero lo cambiado en
   las últimas 30 horas.
 
