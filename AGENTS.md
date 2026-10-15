@@ -427,3 +427,49 @@ siempre se aplique como regla».
 - **El revisor siempre es de otra familia que el autor**, y el material del litigio vetado solo va
   por sus carriles permitidos.
 <!-- END REGLA-REDTEAM-ADVERSARIAL -->
+
+---
+
+<!-- BEGIN REGLA-REPARTO-MAQUINAS sha=3560c5de1da9 · generado por Codigo/scripts/sync-regla-atribucion.py · NO editar a mano -->
+## 🖥️ Se aprovechan TODAS las máquinas — ninguna se satura mientras otra está ociosa
+
+**Al lanzar, correr, encargar o repartir trabajo que consume máquina** —una sesión de código
+(`start_session`, `claude`, `codex`, `agent`, `agy`), una compilación (`next build`, `go build`,
+`xcodebuild`), pruebas, `docker`, un lote o un abanico de encargos—, **se decide en qué máquina corre
+antes de lanzarlo.** Regla de Enrique del 2026-10-14: «la maximización de equipos, pcs, mac y las que
+pone Eduardo y otras siempre debe de ser regla, optimizar todos los recursos, si no se desaprovechan y
+saturan por no delegar y optimizar bien». Aplica a todo agente y a las máquinas que se sumen después.
+
+**Quién recibe qué** (la tabla viva está en `~/.local/share/marimbas/scripts-prod/reglas/reparto-de-maquinas.json`):
+
+| Máquina | Recibe |
+|---|---|
+| **La PC** `marimbas-pc` (16 núcleos) | compilaciones, pruebas, Docker de desarrollo, lotes y sesiones de código sin accesos de la Mac |
+| **La Mac** (10 núcleos) | solo lo que solo ella puede: simulador del iPhone, navegador y Chrome, llavero, teléfono, WhatsApp y la app de Claude que orquesta |
+| **Las máquinas de Eduardo** (`nireto-ci`) | el CI de Nireto |
+| Máquinas nuevas | entran a esa tabla el día que se suman; hasta entonces no reciben nada |
+
+**El principio de fondo (Enrique, 2026-10-14): la ventana de la licencia de Claude es el recurso más
+escaso de la casa.** Todo lo que se pueda hacer fuera de ella se hace fuera, y se gasta antes lo que
+se renueva o se vence: primero las cuotas que se renuevan (Codex) y los créditos que vencen, luego lo
+gratis (`opencode`, el MaaS); la ventana queda para decidir y verificar, no para construir ni redactar.
+
+**Cómo se mide.** Antes de lanzar algo pesado se corre `python3 ~/.local/share/marimbas/scripts-prod/reparto-maquinas.py`
+(carga de las dos y a cuál mandar; o `uptime` en la Mac y `ssh marimbas-pc uptime`) y se manda a la que
+tenga margen. Cada 10 minutos los latidos de las dos suben su carga, memoria e intercambio a la
+base (tabla `maquina_carga`). **Saturada** es carga de 5 min mayor que 1.2 por núcleo, o intercambio
+usado arriba de 75 % con carga arriba de 0.8; **ociosa**, menos de 0.5 por núcleo con memoria libre. Una
+máquina sin muestra reciente es «sin dato», nunca «ociosa». Medido el 2026-10-14: la Mac en carga 18
+sobre 10 núcleos con cinco sesiones y una compilación de Next encima; la PC en 1.4 sobre 16.
+
+**Si una pieza no puede ir a la máquina libre porque falta algo** (un repo sin clonar, una herramienta
+sin instalar, una conexión sin dar de alta), eso se arregla o se deja escrito como pendiente con su
+dueño; no se resuelve saturando la otra. El detector `maquina-saturada-otra-ociosa` grita cuando una
+pasa de su capacidad media hora en horario de trabajo mientras la otra sigue libre.
+
+**Lo que no se cruza:** el Docker normal de la PC es producción (el de desarrollo va solo por la
+envoltura `~/.local/bin/docker`); `~/Documents/MarimbasHome` en la PC es el espejo nocturno y no se escribe;
+el CI de Nireto no regresa a las cajas de la PC ni se manda a GitHub «para no encolar»; y prender o pagar
+máquinas por hora lo deciden Enrique o el vigilante que él autorizó, nunca una sesión a mano. El
+material del litigio vetado no cambia de carril por cambiar de máquina.
+<!-- END REGLA-REPARTO-MAQUINAS -->
